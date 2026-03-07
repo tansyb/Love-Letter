@@ -88,7 +88,10 @@ app.post("/login", async (req, res) => {
     return res.status(401).json({ error: "Invalid login" });
   }
 
-  const token = jwt.sign({ userId: user.id }, SECRET);
+  const token = jwt.sign(
+  { userId: user.id },
+  SECRET,
+  { expiresIn: "1h" });
 
   res.json({ token });
 
@@ -104,4 +107,64 @@ app.get("/profile", authenticateToken, async (req, res) => {
 
   res.json(result.rows[0]);
 
+});
+
+
+// adding a new entry 
+app.post("/entries", authenticateToken, async (req, res) => {
+
+  const { date, content } = req.body;
+
+  try {
+
+    const result = await pool.query(
+      `INSERT INTO entries (user_id, date, content)
+       VALUES ($1,$2,$3)
+       ON CONFLICT (user_id, date)
+       DO UPDATE SET content = EXCLUDED.content
+       RETURNING *`,
+      [req.user.userId, date, content]
+    );
+
+    res.json(result.rows[0]);
+
+  } catch (err) {
+
+    res.status(400).json({ error: "Could not save entry" });
+
+  }
+
+});
+
+// get entry by date 
+app.get("/entries", authenticateToken, async (req, res) => {
+  const { date } = req.query;
+
+  try {
+    const result = await pool.query(
+      "SELECT * FROM entries WHERE user_id=$1 AND date=$2",
+      [req.user.userId, date]
+    );
+    res.json(result.rows[0] || null);
+  } catch (err) {
+    res.status(400).json({ error: "Could not fetch entry" });
+  }
+});
+
+// get latest entry 
+app.get("/entries/latest", authenticateToken, async (req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT * FROM entries WHERE user_id=$1 ORDER BY date DESC LIMIT 1",
+      [req.user.userId]
+    );
+    res.json(result.rows[0] || null);
+  } catch (err) {
+    res.status(400).json({ error: "Could not fetch latest entry" });
+  }
+});
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: "Something went wrong on the server" });
 });
