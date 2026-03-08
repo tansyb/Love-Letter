@@ -1,7 +1,19 @@
-
-
 console.log("script loaded");
 let currentDate = new Date();
+
+const token = localStorage.getItem("token");
+
+if (!token) {
+  window.location.href = "login.html";
+}
+
+function logout() {
+
+  localStorage.removeItem("token");
+
+  window.location.href = "login.html";
+
+}
 
 async function saveEntry() {
 
@@ -27,26 +39,6 @@ async function saveEntry() {
 
 }
 
-async function loginTest() {
-
-  const response = await fetch("http://localhost:3001/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      email: "test@test.com",
-      password: "123456"
-    })
-  });
-
-  const data = await response.json();
-
-  localStorage.setItem("token", data.token);
-
-  console.log("Logged in");
-
-}
 
 function displayDate() {
 
@@ -102,6 +94,5 @@ async function loadEntry() {
 
 }
 
-loginTest();
 displayDate();
 loadEntry();
