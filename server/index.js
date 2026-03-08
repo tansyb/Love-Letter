@@ -2,10 +2,12 @@ import express from "express";
 import pool from "./db/db.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import cors from "cors";
 
 const app = express();
 const SECRET = "supersecret";
 app.use(express.json());
+app.use(cors());
 
 // testing db connection 
 app.get("/test-db", async (req, res) => {
