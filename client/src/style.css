@@ -34,3 +34,21 @@ button {
   font-size: 20px;
   padding: 6px 10px;
 }
+button {
+  padding: 0;               /* remove default padding */
+  border: none;             /* remove the border */
+  background: transparent;  /* remove background color */
+  cursor: pointer;          /* optional: show pointer on hover */
+}
+
+button img {
+  width: 40px;              /* adjust size */
+  height: 40px;
+  object-fit: contain;      /* maintain aspect ratio */
+  image-rendering: pixelated; /* keeps pixel art crisp */
+  display: block;           /* removes inline spacing under image */
+}
+
+button:hover img {
+  filter: brightness(1.2);
+}
