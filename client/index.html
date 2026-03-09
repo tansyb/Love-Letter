@@ -4,28 +4,42 @@
   <meta charset="UTF-8">
   <title>Journal</title>
   <link rel="stylesheet" href="src/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
 
   <div class="container">
 
-    <div class="date-nav">
-      <button onclick="previousDay()">
+    <div class="date-container">
+      <h1 id="date"></h1>
+    </div>
+
+    <div class="journal-wrapper">
+      
+      <img src="src/assets/letter_container.png" class="journal-bg" alt="Journal Background">
+
+      <button class="arrow-btn left" onclick="previousDay()">
         <img src="src/assets/left_arrow.png" alt="Previous">
       </button>
-      <h1 id="date"></h1>
-      <button onclick="nextDay()">
+
+      <textarea
+        id="entry"
+        placeholder="Write about your day..."
+      ></textarea>
+
+      <button class="arrow-btn right" onclick="nextDay()">
         <img src="src/assets/right_arrow.png" alt="Next">
       </button>
     </div>
 
-    <textarea
-      id="entry"
-      placeholder="Write about your day..."
-    ></textarea>
-
-    <button onclick="saveEntry()">Save</button>
-    <button onclick="logout()">Logout</button>
+    <div class="action-buttons">
+      <button class="action-btn" onclick="saveEntry()">
+        <img src="src/assets/save_button.png" alt="Save">
+      </button>
+      <button class="action-btn" onclick="logout()">
+        <img src="src/assets/logout_button.png" alt="Logout">
+      </button>
+    </div>
 
   </div>
 
